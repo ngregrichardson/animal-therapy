@@ -28,6 +28,15 @@ code {
   line-height: 1;
 }
 
+.copyright {
+  color: white;
+  text-shadow: 1px 1px 3px black;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
 .play {
   -webkit-filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, 0.6))
   drop-shadow(-1px -1px 0 rgba(255, 255, 255, 0.6));

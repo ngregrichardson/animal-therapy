@@ -41,6 +41,8 @@ function App() {
                     media = post.data.media.reddit_video.fallback_url;
                     type = "video";
                     break;
+                  default:
+                    return null;
                 }
                 return {
                   title: post.data.title,
@@ -49,7 +51,7 @@ function App() {
                   type,
                   media,
                 };
-              }),
+              }).filter(post => post !== null)
           ]);
           setRefreshing(false);
         })
@@ -112,9 +114,9 @@ function App() {
               <span>{post.title.length > 75 ? "" : post.title}</span>
             </div>
             {post.type === "image" ? (
-              <img src={post.media} style={{ width: "100%" }} alt={post.id} />
+              <img src={post.media} style={{ maxWidth: '90vw', maxHeight: '90vh', width: 'auto' }} alt={post.id} />
             ) : (
-              <video src={post.media} style={{ width: "100%" }} id={post.id} />
+              <video src={post.media} style={{ maxWidth: '90vw', maxHeight: '90vh', width: 'auto' }} id={post.id} />
             )}
             {post.type !== "image" ? (
               <div
@@ -138,7 +140,7 @@ function App() {
                       src={"/play.png"}
                       alt={"play"}
                       className="play"
-                      style={{ height: 128, width: 128 }}
+                      style={{ height: 100, width: 100 }}
                       id={`${post.id}_play`}
                     />
                   ) : null
@@ -147,6 +149,15 @@ function App() {
             ) : null}
           </div>
         ))}
+          <a
+              style={{position: 'fixed', left: 0, right: 0, bottom: 5, zIndex: 100}}
+              className="copyright"
+              href={'https://github.com/ngregrichardson/AnimalTherapy'}
+              target={'_blank'}
+              rel="noopener noreferrer"
+          >
+              Made with <span role={'img'}>❤</span>️for Dani
+          </a>
       </PerfectScrollbar>
     </>
   );

@@ -156,7 +156,7 @@ function App() {
               target={'_blank'}
               rel="noopener noreferrer"
           >
-              Made with <span role={'img'}>❤</span>️for Dani
+              Made with <span role={'img'}>❤</span>️ for Dani
           </a>
       </PerfectScrollbar>
     </>

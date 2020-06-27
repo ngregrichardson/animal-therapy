@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Spinner from "react-spinkit";
 
 const mediaTypes = ["image", "hosted:video", "rich:video"];
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [after, setAfter] = useState("");
   const [count, setCount] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -51,14 +53,16 @@ function App() {
                   type,
                   media,
                 };
-              }).filter(post => post !== null)
+              })
+              .filter((post) => post !== null),
           ]);
           setRefreshing(false);
         })
         .catch((e) => {
           console.log(e);
           setRefreshing(false);
-        });
+        })
+        .finally(() => setInitialLoad(false));
     }
   };
 
@@ -76,6 +80,22 @@ function App() {
       document.querySelector(`#${videoId}_play`).classList.remove("paused");
     }
   };
+
+  if (initialLoad) {
+    return (
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spinner name="wave" noFadeIn />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -114,9 +134,17 @@ function App() {
               <span>{post.title.length > 75 ? "" : post.title}</span>
             </div>
             {post.type === "image" ? (
-              <img src={post.media} style={{ maxWidth: '90vw', maxHeight: '90vh', width: 'auto' }} alt={post.id} />
+              <img
+                src={post.media}
+                style={{ maxWidth: "90vw", maxHeight: "90vh", width: "auto" }}
+                alt={post.id}
+              />
             ) : (
-              <video src={post.media} style={{ maxWidth: '90vw', maxHeight: '90vh', width: 'auto' }} id={post.id} />
+              <video
+                src={post.media}
+                style={{ maxWidth: "90vw", maxHeight: "90vh", width: "auto" }}
+                id={post.id}
+              />
             )}
             {post.type !== "image" ? (
               <div
@@ -149,15 +177,21 @@ function App() {
             ) : null}
           </div>
         ))}
-          <a
-              style={{position: 'fixed', left: 0, right: 0, bottom: 5, zIndex: 100}}
-              className="copyright"
-              href={'https://github.com/ngregrichardson/AnimalTherapy'}
-              target={'_blank'}
-              rel="noopener noreferrer"
-          >
-              Made with <span role={'img'}>❤</span>️ for Dani
-          </a>
+        <a
+          style={{
+            position: "fixed",
+            left: 0,
+            right: 0,
+            bottom: 5,
+            zIndex: 100,
+          }}
+          className="copyright"
+          href={"https://github.com/ngregrichardson/AnimalTherapy"}
+          target={"_blank"}
+          rel="noopener noreferrer"
+        >
+          Made with <span role={"img"}>❤</span>️ for Dani
+        </a>
       </PerfectScrollbar>
     </>
   );

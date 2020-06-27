@@ -12,6 +12,7 @@
     "react-dom": "^16.13.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-scripts": "3.4.1",
+    "react-spinkit": "^3.0.0",
     "video-react": "^0.14.1"
   },
   "scripts": {

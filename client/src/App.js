@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Spinner from "react-spinkit";
+import Post from "./components/Post";
 
 const mediaTypes = ["image", "hosted:video", "rich:video"];
 
@@ -20,9 +21,9 @@ function App() {
         .then((res) => res.json())
         .then((res) => {
           setAfter(res.data.after);
-          setCount(count + res.data.dist);
-          setPosts([
-            ...posts,
+          setCount((c) => c + res.data.dist);
+          setPosts((p) => [
+            ...p,
             ...res.data.children
               .filter((post) => mediaTypes.includes(post.data.post_hint))
               .map((post) => {
@@ -56,144 +57,61 @@ function App() {
               })
               .filter((post) => post !== null),
           ]);
-          setRefreshing(false);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((e) => console.log(e))
+        .finally(() => {
           setRefreshing(false);
-        })
-        .finally(() => setInitialLoad(false));
+          setInitialLoad(false);
+        });
     }
   };
 
-  useEffect(() => {
-    getTopPosts();
-  }, []);
-
-  let _toggleVideoPaused = (videoId) => {
-    let video = document.querySelector(`#${videoId}`);
-    if (video.paused) {
-      video.play.call(video);
-      document.querySelector(`#${videoId}_play`).classList.add("paused");
-    } else {
-      video.pause.call(video);
-      document.querySelector(`#${videoId}_play`).classList.remove("paused");
-    }
-  };
+  useEffect(getTopPosts, []);
 
   if (initialLoad) {
     return (
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Spinner name="wave" noFadeIn />
+      <div className={"loadingContainer"}>
+        <Spinner name="wave" fadeIn={"none"} />
       </div>
     );
   }
 
   return (
-    <>
+    <div className={"rootContainer"}>
+      <div className={"navbar"}>
+        <div className={"brandContainer"}>
+          <img src={"/favicon-32x32.png"} alt={"Animal Therapy"} />
+          <span className={"brand"}>Animal Therapy</span>
+        </div>
+        <div className={"navbarRightContainer"}>
+          <a
+            target={"_blank"}
+            href={"https://ngregrichardson.dev/projects"}
+            rel="noopener noreferrer"
+            className={"navbarRightLink"}
+          >
+            See my other projects
+          </a>
+        </div>
+      </div>
       <PerfectScrollbar
         onYReachEnd={getTopPosts}
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          zIndex: 1000,
-        }}
+        className={"scrollbarContainer"}
       >
         {posts.map((post) => (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: 20,
-              marginRight: 11,
-              position: "relative",
-            }}
-            key={post.id}
-          >
-            <div
-              style={{
-                position: "absolute",
-                left: 20,
-                right: 20,
-                textAlign: "center",
-                marginHorizontal: 20,
-              }}
-              className="title"
-            >
-              <span>{post.title.length > 75 ? "" : post.title}</span>
-            </div>
-            {post.type === "image" ? (
-              <img
-                src={post.media}
-                style={{ maxWidth: "90vw", maxHeight: "90vh", width: "auto" }}
-                alt={post.id}
-              />
-            ) : (
-              <video
-                src={post.media}
-                style={{ maxWidth: "90vw", maxHeight: "90vh", width: "auto" }}
-                id={post.id}
-              />
-            )}
-            {post.type !== "image" ? (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }}
-                title={"Click to play/pause"}
-                onClick={() => _toggleVideoPaused(post.id)}
-              >
-                {document.getElementById(post.id) ? (
-                  document.getElementById(post.id).paused ? (
-                    <img
-                      src={"/play.png"}
-                      alt={"play"}
-                      className="play"
-                      style={{ height: 100, width: 100 }}
-                      id={`${post.id}_play`}
-                    />
-                  ) : null
-                ) : null}
-              </div>
-            ) : null}
-          </div>
+          <Post post={post} key={post.id} />
         ))}
         <a
-          style={{
-            position: "fixed",
-            left: 0,
-            right: 0,
-            bottom: 5,
-            zIndex: 100,
-          }}
           className="copyright"
           href={"https://github.com/ngregrichardson/AnimalTherapy"}
           target={"_blank"}
           rel="noopener noreferrer"
         >
-          Made with <span role={"img"}>❤</span>️ for Dani
+          &copy; Noah Richardson {new Date().getFullYear()} | Made with{" "}
+          <span role={"img"}>❤</span>️ for Dani
         </a>
       </PerfectScrollbar>
-    </>
+    </div>
   );
 }
 

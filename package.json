@@ -1,26 +1,48 @@
 {
   "name": "animaltherapy",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "private": true,
   "dependencies": {
-    "express": "^4.17.1",
-    "nodemon": "^2.0.3",
-    "path": "^0.12.7"
+    "@chakra-ui/react": "^1.2.1",
+    "@emotion/react": "^11.1.4",
+    "@emotion/styled": "^11.0.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "framer-motion": "^3.3.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-icons": "^4.1.0",
+    "react-masonry-css": "^1.0.14",
+    "react-scripts": "4.0.2",
+    "web-vitals": "^1.0.1"
   },
-  "devDependencies": {},
   "scripts": {
-    "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "serve": "npx serve -l 4000 -s build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ngregrichardson/AnimalTherapy.git"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ngregrichardson/AnimalTherapy/issues"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
-  "homepage": "https://github.com/ngregrichardson/AnimalTherapy#readme"
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
 }

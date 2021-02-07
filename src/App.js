@@ -39,7 +39,7 @@ const App = () => {
     if (!isRefreshing) {
       setIsRefreshing(true);
       fetch(
-        `https://www.reddit.com/r/eyebleach/top.json?limit=20&t=hour&after=${after.current}&count=${count}`
+        `https://www.reddit.com/r/aww/top.json?limit=20&t=hour&after=${after.current}&count=${count}`
       )
         .then((res) => res.json())
         .then((res) => {

@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Flex, Heading, Image, useTheme } from "@chakra-ui/react";
+import { Flex, Heading, Image, useTheme, Spinner } from "@chakra-ui/react";
 import { FiPlayCircle } from "react-icons/all";
 
 const Post = ({ post }) => {
   const theme = useTheme();
   const [paused, setPaused] = useState(true);
   const [titleShown, setTitleShown] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const videoRef = useRef();
+  const imageRef = useRef();
 
   useEffect(() => {
-    if (post?.type !== "image" && videoRef?.current?.volume) {
-      videoRef.current.volume = 1;
+    if (isLoading && post?.type === "image" && imageRef.current?.complete) {
+      setIsLoading(false);
     }
-  }, [post?.type, videoRef.current]);
+  }, [post?.type, isLoading]);
 
   let toggleVideoPaused = () => {
     let video = videoRef.current;
@@ -25,12 +28,13 @@ const Post = ({ post }) => {
     }
   };
 
-  return (
+  return error ? null : (
     <Flex
       position={"relative"}
       justifyContent={"center"}
       margin={"15px"}
       alignItems={"flex-start"}
+      minHeight={isLoading ? "200px" : undefined}
     >
       <Flex
         position={"absolute"}
@@ -55,7 +59,7 @@ const Post = ({ post }) => {
           <Heading
             textAlign={"center"}
             isTruncated
-            noOfLines={4}
+            noOfLines={3}
             color={"white.500"}
             fontSize={{ base: "xl", sm: "xl", lg: "2xl" }}
           >
@@ -81,17 +85,22 @@ const Post = ({ post }) => {
           }
           cursor={post?.type !== "image" ? "pointer" : "default"}
         >
-          {post?.type !== "image" && paused ? (
+          {isLoading ? (
+            <Spinner boxSize={"25px"} />
+          ) : post?.type !== "image" && paused ? (
             <FiPlayCircle size={"30%"} color={theme.colors.white["500"]} />
           ) : null}
         </Flex>
       </Flex>
       {post.type === "image" ? (
         <Image
+          ref={imageRef}
           src={post.media}
           width={"100%"}
           objectFit={"contain"}
           alt={post.id}
+          onLoad={() => setIsLoading(false)}
+          onError={() => setError(true)}
         />
       ) : (
         <video
@@ -99,6 +108,8 @@ const Post = ({ post }) => {
           src={post.media}
           style={{ width: "100%", objectFit: "contain" }}
           loop
+          onLoadedData={() => setIsLoading(false)}
+          onError={() => setError(true)}
         />
       )}
     </Flex>

@@ -26,7 +26,12 @@ const Post = ({ post }) => {
   };
 
   return (
-    <Flex position={"relative"} justifyContent={"center"} margin={"15px"}>
+    <Flex
+      position={"relative"}
+      justifyContent={"center"}
+      margin={"15px"}
+      alignItems={"flex-start"}
+    >
       <Flex
         position={"absolute"}
         top={0}

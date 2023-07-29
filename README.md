@@ -1,4 +1,4 @@
-
+⚠️Archived because Fuck Spez⚠️
 # :heart_eyes_cat: AnimalTherapy
 An infinite source of therapeutic animal pictures that make you go aww.
 
